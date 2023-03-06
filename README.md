@@ -31,7 +31,7 @@ INPUT: 1. A folder named "input" which contains ELAN files (eaf).
           in ge and ps will be replaced with their (morphological/lexical) meanings.
        2. xlsx file which contains a morphological glossing dictionary of Khoekhoe
        3. xlsx file which contains a lexical glossing dictionary
-
-       We also assume that all the input files are created with the project's templates (that define the tiers structures).
+       
+We also assume that all the input files are created with the project's templates (that define the tiers structures).
 
 OUTPUT: The glossed eaf files (in "preprocessing\output" folder).
