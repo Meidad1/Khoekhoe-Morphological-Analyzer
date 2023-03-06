@@ -12,18 +12,6 @@ class EAF_Parser:
         self.tx_indexes, self.fte_indexes, self.orig_indexes, self.ge_indexes, self.ps_indexes = \
             tiers_indexes[0], tiers_indexes[1], tiers_indexes[2], tiers_indexes[3], tiers_indexes[4]
 
-    # def get_tx_fte_annotations_mapping(self):
-    #     tx_to_fte = {}  # {tx_ann_id: fte_ann_id}, for example: {"a2": "a3"}, where a2 is the annotation id of tx tier and a3 is the annotation id of its translation
-    #     for fte_idx in self.fte_indexes:
-    #         cur_fte = self.root[fte_idx]
-    #         for ann in cur_fte:
-    #             ref_ann = ann[0]
-    #             if 'ANNOTATION_REF' in ref_ann.attrib.keys():
-    #                 fte_id = ref_ann.attrib['ANNOTATION_ID']
-    #                 tx_id = ref_ann.attrib['ANNOTATION_REF']
-    #                 tx_to_fte[tx_id] = fte_id
-    #     return tx_to_fte
-
     def get_tx_fte_annotations_mapping(self):
         tx_to_fte = {}
         for fte_idx in self.fte_indexes:
