@@ -5,10 +5,10 @@ from preprocessing import preprocessor
 
 MORPH_DICT_PATH = "input\\morph_gloss_dict.xlsx"
 LEXICAL_DICT_PATH = "input\\lexical_gloss_dict.xlsx"
-GLOSSING_INPUT_DIRECTORY_PATH = "C:\\Users\\User\\Desktop\\Meidad\\Work\\Khoekhoe Project\\KK_automatic_glossing\\input"
-PREPROCESSING_INPUT_DIRECTORY_PATH = "C:\\Users\\User\\Desktop\\Meidad\\Work\\Khoekhoe Project\\KK_automatic_glossing\\preprocessing\\input"
-OUTPUT_DIRECTORY_PATH = "C:\\Users\\User\\Desktop\\Meidad\\Work\\Khoekhoe Project\\KK_automatic_glossing\\output"
-PREPROCESSING_OUTPUT_DIRECTORY_PATH = "C:\\Users\\User\\Desktop\\Meidad\\Work\\Khoekhoe Project\\KK_automatic_glossing\\preprocessing\\output"
+GLOSSING_INPUT_DIRECTORY_PATH = "input"
+PREPROCESSING_INPUT_DIRECTORY_PATH = "preprocessing\\input"
+OUTPUT_DIRECTORY_PATH = "output"
+PREPROCESSING_OUTPUT_DIRECTORY_PATH = "preprocessing\\output"
 CAPITALIZED_WORDS_LIST_PATH = "preprocessing\\capital_words.txt"
 
 
