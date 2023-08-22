@@ -2,8 +2,8 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 import main
 
-DICT_FOR_GLOSSES_ID = "18UdxjLQ78cinZqTc3O9szh5nKzapY54u"
-GOOGLE_API_CREDENTIALS_PATH = 'Google_Drive_API_credentials.json'
+DICT_FOR_GLOSSES_ID = ""
+GOOGLE_API_CREDENTIALS_PATH = ''
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']   # access modes
 
 
