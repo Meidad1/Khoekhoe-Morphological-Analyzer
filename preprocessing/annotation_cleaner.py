@@ -1,4 +1,9 @@
+import json
+import re
+
 class AnnotationCleaner:
+    MISSPELLINGS_DICTS_PATH = "input\\misspellings_correction.json"
+    # MISSPELLINGS_DICTS_PATH = "input/misspellings_correction.json"      # for MAC
     PUNCTUATION_MARKS = ['"', "“", "”", "‘", "’", '(', ')']
     FINAL_INITIAL_PUNCTUATION_MARKS = [";", "?", "…", "!", ",", ".", ":"]
 
@@ -11,7 +16,13 @@ class AnnotationCleaner:
     CLICK_CHARS_VALIDITY_LIST = [("!", "ǃ"), ("#", "ǂ"), ("||", "ǁ"), ("|", "ǀ"), ("=", "ǂ")]
 
     def __init__(self):
-        self.cur_annotation = None  # cur_annotation is a list of strings
+        self.cur_annotation = None                                                 # cur_annotation is a list of strings
+        self.misspellings_dicts = self.read_misspellings_dicts_json()
+        self.misspellings_patterns_and_replacements = self.misspellings_dicts['misspellingsPatternsAndReplacements']       # a dict
+
+    def read_misspellings_dicts_json(self):
+        with open(self.MISSPELLINGS_DICTS_PATH, encoding="utf8") as json_file:
+            return json.load(json_file)
 
     def set_annotation(self, annotation: str):
         self.cur_annotation = annotation.split()
@@ -31,9 +42,21 @@ class AnnotationCleaner:
         for pair in self.CLICK_CHARS_VALIDITY_LIST:
             prefix_with_valid_clicks = word[:-1].replace(pair[0], pair[1])
             word = prefix_with_valid_clicks + word[-1]
-        if not word.startswith("tsītsī") and word.startswith("tsī"):
-            word = word.replace("tsī", "tsî")
         return word
+
+    def fix_orthography_in_tx_tier(self):
+        ann_str_result = (" ".join(self.cur_annotation)).replace("  ", " ").strip()
+        ann_str_result = ann_str_result.replace("   ", " ").strip()
+        for pattern in self.misspellings_patterns_and_replacements:
+            ann_str_result = re.sub(pattern, self.misspellings_patterns_and_replacements[pattern], ann_str_result)
+        return ann_str_result
+
+    def validate_fte_backchannel(self, fte: str):
+        if fte.lower().replace(" ", "") in {"[backchannel]", "[backchanel]", "[backhannel]",
+                                            "[backchannel", "backchannel]", "[ backchannel]"
+                                            "(backchannel)"}:
+            fte = "[BACKCHANNEL]"
+        return fte
 
     def clean_annotation(self, capitalized_words_set):
         """
@@ -49,7 +72,7 @@ class AnnotationCleaner:
             return ""
 
     def clean_punctuation(self):
-        for i in range(len(self.cur_annotation)):  # iterating over each word in the annotation
+        for i in range(len(self.cur_annotation)):                   # iterating over each word in the annotation
             self.cur_annotation[i] = self.clean_punctuation_of_single_word(self.cur_annotation[i])
 
     def clean_punctuation_of_single_word(self, word):
@@ -60,6 +83,9 @@ class AnnotationCleaner:
         """
         for mark in self.PUNCTUATION_MARKS:
             word = word.replace(mark, "")
+        # if not (len(word) > 2 and word[1] == ['['] and word[-1] == [']']):        # For now preventing cleaning of square brackets
+        #     word = word.replace('[', "")
+        #     word = word.replace(']', "")
         while len(word) > 0 and word[-1] in self.FINAL_INITIAL_PUNCTUATION_MARKS:
             word = word[:-1]
         while len(word) > 0 and word[0] in self.FINAL_INITIAL_PUNCTUATION_MARKS:  # for example: "...blah blah"
@@ -69,3 +95,10 @@ class AnnotationCleaner:
     def decapitalize_annotation(self, capitalized_words_set):
         if self.cur_annotation[0] not in capitalized_words_set:
             self.cur_annotation[0] = self.cur_annotation[0].lower()
+
+    def handle_lexical_backchannel(self, fte: str):
+        if fte in {"yes", "ok", "okay", "okey", "yess", "yeah", "yes yes"}:
+            if fte in {"ok", "okay", "okey"}:
+                fte = "OK"
+            fte = fte + " [BACKCHANNEL_LEX]"
+        return fte
